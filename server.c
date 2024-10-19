@@ -98,6 +98,24 @@ HttpRequest *parse_request(char buffer[1024])
     return req;
 }
 
+/*Sending a HTTP response if it matches the method and path.*/
+void http_response(int clfd, HttpRequest *request)
+{
+    // Send HTTP response
+    const char *http_response =
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html\r\n"
+        "Content-Length: 22\r\n"
+        "Connection: close\r\n"
+        "\r\n"
+        "<h1>HELLO WORLD</h1>";
+    if ((strcmp(request->method, "GET") == 0) && (strcmp(request->path, "/aivaneezy") == 0))
+    {
+        send(clfd, http_response, strlen(http_response), 0);
+    }
+}
+
+/*Printing our METHOD and PATH*/
 void parse_print_req(HttpRequest *req)
 {
     printf("Method: %s\n", req->method);
@@ -124,8 +142,10 @@ void client_connect(int clfd)
     if (request)
     {
         parse_print_req(request);
-        free(request);
     }
+
+    // Send HTTP response
+    http_response(clfd, request);
 
     //  Close the client connection after sending the response
     close(clfd);
