@@ -24,5 +24,6 @@ HttpRequest *parse_request(char buffer[1024]);
 void http_response(int clfd, HttpRequest *request);
 void parse_print_req(HttpRequest *req);
 void client_connect(int clfd);
+void server_static_image(int clfd);
 
 #endif
